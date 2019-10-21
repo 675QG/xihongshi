@@ -1,0 +1,894 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <title>西红柿数据-我要赚钱-公会大厅</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="stylesheet" href="css/bootstrap.min.css" />
+  <link rel="stylesheet" href="css/bootstrap-responsive.min.css" />
+  <link rel="stylesheet" href="css/colorpicker.css" />
+  <link rel="stylesheet" href="css/datepicker.css" />
+  <link rel="stylesheet" href="css/uniform.css" />
+  <link rel="stylesheet" href="css/select2.css" />
+  <link rel="stylesheet" href="css/matrix-style.css" />
+  <link rel="stylesheet" href="css/matrix-media.css" />
+  <link rel="stylesheet" href="css/bootstrap-wysihtml5.css" />
+  <link href="font-awesome/css/font-awesome.css" rel="stylesheet" />
+  <link href='http://fonts.googleapis.com/css?family=Open+Sans:400,700,800' rel='stylesheet' type='text/css'>
+</head>
+
+<body>
+  {include file="common/topheader" /}
+
+  {include file="common/sidebar" /}
+
+  <div id="content">
+    <div id="content-header">
+    </div>
+    <div class="container-fluid">
+      <hr />
+      <div class="row-fluid">
+        <div class="span7">
+
+          <div class="widget-box">
+            <div class="widget-title"> <span class="icon"> <i class="icon-file"></i> </span>
+              <h5>推荐公会</h5>
+              <div style="text-align: center">
+                <input type="text" id="search_words" value="{$search_words}"
+                  style="width: 330px; height: 20px;margin-top: 3px" placeholder="请输入公会名称" />
+                <button id="guild_search" type="submit" style="margin-bottom: 7px;height: 30px;width: 30px"
+                  class="tip-bottom" title="搜索"><i class="icon-search icon-white"></i></button>
+              </div>
+            </div>
+            <div id="guild" class="widget-content nopadding">
+              <ul class="recent-posts">
+                {foreach name="guild" item="item" index="index"}
+                <li>
+                  <div class="article-post">
+                    <div class="fr">
+                      {if $join_guild_id == $item.guild_id}
+                      {if $join_guild_states == 2}
+                      <a id='' name="{$my_guild[0]['guild_id']}" class="btn btn-warning btn-mini">审核中</a>
+                      {elseif $join_guild_states == 1}
+                      <a id='quit_guild' name="{$join_guild_id}" class="btn btn-danger btn-mini">退出公会</a>
+                      {elseif $join_guild_states == 0}
+                      <a id='re_join' name="{$my_guild[0]['guild_id']}" class="btn btn-info btn-mini">重新申请</a>
+                      {/if}
+                      {else}
+                      <a id="join_guild{$index}" name='{$item.guild_id}' class="btn btn-success btn-mini">申请加入</a>
+                      {/if}
+                    </div>
+                    <p> 公会名称：{$item.guild_name}</p>
+                    <p>公会人数：{$item.people_number}</p>
+                    <span>公会简介：{$item.guild_introduce}</span>
+                  </div>
+                </li>
+                {/foreach}
+                </li>
+              </ul>
+            </div>
+          </div>
+        </div>
+
+
+        <div class="span4">
+
+          <div class="widget-box">
+            <div class="widget-title"> <span class="icon"> <i class="icon-align-justify"></i> </span>
+              <h5>我的公会</h5>
+            </div>
+            <div class="widget-content">
+              {if $create_guild_id}
+              您创建的公会名称：{$my_guild[0]['guild_name']}
+
+              状态：
+              {if $my_guild[0]['guild_states']==2}
+              审核中
+              {elseif $my_guild[0]['guild_states']==1}
+              审核通过
+              <a href="guild_manage?guild_id={$create_guild_id}" class="btn btn-primary btn-mini">管理公会</a>
+              <div class="widget-content nopadding">
+                <ul class="recent-posts">
+                  {foreach name="get_join_msg" item="item" index="index"}
+
+                  <li>
+                    <div class="article-post">
+                      <div class="fr">
+                        <a id="join_agree{$index}" name='{$item.user_id}' class="btn btn-primary btn-mini">同意</a>
+                        <a id="join_reject{$index}" name='{$item.user_id}' class="btn btn-danger btn-mini">拒绝</a></div>
+                      <span class="user-info"> {$item.user_name}请求加入您的公会</span>
+                    </div>
+                  </li>
+                  {/foreach}
+                </ul>
+              </div>
+              {elseif $my_guild[0]['guild_states']==0}
+              审核未通过   <a id='re_create' name="{$my_guild[0]['guild_id']}" class="btn btn-info btn-mini">重新申请</a>
+
+              {/if}
+
+              {else}
+              {if $join_guild_id}
+
+              {if $join_guild_states==2}
+              您申请加入的公会名称：{$my_guild[0]['guild_name']}
+              状态：会长审核中
+
+              {elseif $join_guild_states==1}
+              您加入的公会名称：{$my_guild[0]['guild_name']}
+              状态：会长审核通过
+              <a id='quit_guild2' name="{$my_guild[0]['guild_id']}" class="btn btn-danger btn-mini">退出公会</a>
+              {elseif $join_guild_states==0}
+              您申请加入的公会名称：{$my_guild[0]['guild_name']}
+              状态：会长审核未通过
+              <a id='re_join2' name="{$my_guild[0]['guild_id']}" class="btn btn-info btn-mini">重新申请</a>
+
+              {/if}
+
+              {else}
+              您未加入任何公会，
+              快去寻找公会加入吧！
+              或 <a id='create_guild' class="btn btn-primary btn-mini">创建公会</a>
+              {/if}
+              {/if}
+            </div>
+          </div>
+          {if $create_guild_id}
+          <div id='re_create_guild' class="widget-box">
+            <div class="widget-title"> <span class="icon"> <i class="icon-align-justify"></i> </span>
+              <h5>重新申请</h5>
+            </div>
+            <div class="widget-content nopadding">
+              <form id="form" class="form-horizontal">
+                <div class="control-group">
+                  <label class="control-label">公司名称:</label>
+                  <div class="controls">
+                    <input id="re_company_name" value={$my_guild.0.company_name} type="text" maxlength="30" class="span11" placeholder="请输入公司名称" />
+                  </div>
+                </div>
+
+                <div class="control-group">
+                  <label class="control-label">营业执照：</label>
+                  <div class="controls">
+                    <input id="re_business_license"  accept="image/png, image/jpeg, image/gif, image/jpg"
+                      name="business_license" type="file" />
+                    <span class="help-block">只能上传jpg,jpeg,png,gif格式，大小不超过5M</span>
+                  </div>
+                </div>
+
+
+                <div class="control-group">
+                  <label class="control-label">银行开户证明：</label>
+                  <div class="controls">
+                    <input id="re_bank_account" accept="image/png, image/jpeg, image/gif, image/jpg" type="file" />
+                    <span class="help-block">只能上传jpg,jpeg,png,gif格式，大小不超过5M</span>
+                  </div>
+                </div>
+
+
+                <div class="control-group">
+                    <label class="control-label">团队风采：</label>
+                    <div class="controls">
+                      <input id="re_guild_demeanor" accept="image/png, image/jpeg, image/gif, image/jpg" type="file" />
+                      <span class="help-block">只能上传jpg,jpeg,png,gif格式，大小不超过5M</span>
+                    </div>
+                  </div>
+
+                <div class="control-group">
+                  <label class="control-label">公司介绍 :</label>
+                  <div class="controls">
+                    <textarea id="re_company_introduce" class="span11" maxlength="100" placeholder="请输入公司介绍">{$my_guild.0.company_introduce}</textarea>
+                  </div>
+                </div>
+
+                <div class="control-group">
+                  <label class="control-label">联系人 :</label>
+                  <div class="controls">
+                    <input id="re_contact_name"  value={$my_guild.0.contact_name}  type="text" maxlength="10" class="span11" placeholder="请输入联系人" />
+                  </div>
+                </div>
+                <div class="control-group">
+                  <label class="control-label">联系电话：</label>
+                  <div class="controls">
+                    <input id="re_contact_phone"  value={$my_guild.0.contact_phone}  type="text" maxlength="20" class="span11" placeholder="请输入联系电话" />
+                  </div>
+                </div>
+                <div class="control-group">
+                  <label class="control-label">电子邮箱:</label>
+                  <div class="controls">
+                    <input id="re_contact_email" value={$my_guild.0.contact_email} type="text" maxlength="30" class="span11" placeholder="请输入电子邮箱" />
+                  </div>
+                </div>
+                <div class="control-group">
+                  <label class="control-label">微信号：</label>
+                  <div class="controls">
+                    <input id="re_contact_wechat" value={$my_guild.0.contact_wechat} type="text" maxlength="30" placeholder="请输入微信号" class="span11" />
+                  </div>
+                </div>
+
+                <div class="control-group">
+                  <label class="control-label">公会名称:</label>
+                  <div class="controls">
+                    <input id="re_guild_name" value={$my_guild.0.guild_name} type="text" maxlength="20" class="span11" placeholder="请输入公会名称" />
+                  </div>
+                </div>
+
+                <div class="control-group">
+                  <label class="control-label">公会介绍 :</label>
+                  <div class="controls">
+                    <textarea id="re_guild_introduce"  class="span11" maxlength="100" placeholder="请输入公会介绍">{$my_guild.0.guild_introduce}</textarea>
+                  </div>
+                </div>
+
+                <div class="control-group">
+                    <label class="control-label">项目经历 :</label>
+                    <div class="controls">
+                      <textarea id="re_guild_experience"  class="span11" maxlength="100" placeholder="请输入项目经历">{$my_guild.0.guild_experience}</textarea>
+                    </div>
+                  </div>
+
+                  <div class="control-group">
+                      <label class="control-label">公会优势 :</label>
+                      <div class="controls">
+                        <textarea id="re_guild_advantage" class="span11" maxlength="100" placeholder="请输入公会优势">{$my_guild.0.guild_advantage}</textarea>
+                      </div>
+                    </div>
+              </form>
+              <div class="form-actions">
+                <button id='re_submit' name="{$my_guild.0.guild_id}" type="submit" style="margin-left:180px;" class="btn btn-success">提交审核</button>
+              </div>
+
+
+            </div>
+
+
+          </div>
+
+          {/if}
+
+
+
+          <div id='guild_company' class="widget-box">
+            <div class="widget-title"> <span class="icon"> <i class="icon-align-justify"></i> </span>
+              <h5>公会资料</h5>
+            </div>
+      
+  
+            <div class="widget-content nopadding">
+              <form id="form" class="form-horizontal">
+                <div class="control-group">
+                  <label class="control-label">公司名称:</label>
+                  <div class="controls">
+                    <input id="company_name" type="text" maxlength="30" class="span11" placeholder="请输入公司名称" />
+                  </div>
+                </div>
+
+                <div class="control-group">
+                  <label class="control-label">营业执照：</label>
+                  <div class="controls">
+                    <input id="business_license" accept="image/png, image/jpeg, image/gif, image/jpg"
+                      name="business_license" type="file" />
+                    <span class="help-block">只能上传jpg,jpeg,png,gif格式，大小不超过5M</span>
+                  </div>
+                </div>
+
+
+                <div class="control-group">
+                  <label class="control-label">银行开户证明：</label>
+                  <div class="controls">
+                    <input id="bank_account" accept="image/png, image/jpeg, image/gif, image/jpg" type="file" />
+                    <span class="help-block">只能上传jpg,jpeg,png,gif格式，大小不超过5M</span>
+                  </div>
+                </div>
+
+
+                <div class="control-group">
+                    <label class="control-label">团队风采：</label>
+                    <div class="controls">
+                      <input id="guild_demeanor" accept="image/png, image/jpeg, image/gif, image/jpg" type="file" />
+                      <span class="help-block">只能上传jpg,jpeg,png,gif格式，大小不超过5M</span>
+                    </div>
+                  </div>
+
+                <div class="control-group">
+                  <label class="control-label">公司介绍 :</label>
+                  <div class="controls">
+                    <textarea id="company_introduce" class="span11" maxlength="100" placeholder="请输入公司介绍"></textarea>
+                  </div>
+                </div>
+
+                <div class="control-group">
+                  <label class="control-label">联系人 :</label>
+                  <div class="controls">
+                    <input id="contact_name" type="text" maxlength="10" class="span11" placeholder="请输入联系人" />
+                  </div>
+                </div>
+                <div class="control-group">
+                  <label class="control-label">联系电话：</label>
+                  <div class="controls">
+                    <input id="contact_phone" type="text" maxlength="20" class="span11" placeholder="请输入联系电话" />
+                  </div>
+                </div>
+                <div class="control-group">
+                  <label class="control-label">电子邮箱:</label>
+                  <div class="controls">
+                    <input id="contact_email" type="text" maxlength="30" class="span11" placeholder="请输入电子邮箱" />
+                  </div>
+                </div>
+                <div class="control-group">
+                  <label class="control-label">微信号：</label>
+                  <div class="controls">
+                    <input id="contact_wechat" type="text" maxlength="30" placeholder="请输入微信号" class="span11" />
+                  </div>
+                </div>
+
+                <div class="control-group">
+                  <label class="control-label">公会名称:</label>
+                  <div class="controls">
+                    <input id="guild_name" type="text" maxlength="20" class="span11" placeholder="请输入公会名称" />
+                  </div>
+                </div>
+
+                <div class="control-group">
+                  <label class="control-label">公会介绍 :</label>
+                  <div class="controls">
+                    <textarea id="guild_introduce" class="span11" maxlength="100" placeholder="请输入公会介绍"></textarea>
+                  </div>
+                </div>
+
+                <div class="control-group">
+                    <label class="control-label">项目经历 :</label>
+                    <div class="controls">
+                      <textarea id="guild_experience" class="span11" maxlength="100" placeholder="请输入项目经历"></textarea>
+                    </div>
+                  </div>
+
+                  <div class="control-group">
+                      <label class="control-label">公会优势 :</label>
+                      <div class="controls">
+                        <textarea id="guild_advantage" class="span11" maxlength="100" placeholder="请输入公会优势"></textarea>
+                      </div>
+                    </div>
+              </form>
+              <div class="form-actions">
+                <button id='submit' type="submit" style="margin-left:180px;" class="btn btn-success">提交审核</button>
+              </div>
+
+            </div>
+
+
+          </div>
+          {if $create_guild_id && $my_guild[0]['guild_states']==1}
+          <div class="widget-box">
+            <div class="widget-title"> <span class="icon"> <i class="icon-align-justify"></i> </span>
+              <h5>成员管理</h5>
+            </div>
+            <div class="widget-content nopadding">
+
+
+              <table class="table table-bordered table-striped">
+                <thead>
+                  <tr>
+                    <th>用户名</th>
+
+                    <th>操作</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {foreach name="get_guild_member" item="item" index="index"}
+                  <tr class="odd gradeX">
+
+                    <td>{$item.user_name}</td>
+                    <td>{if $item.is_check} <a id="cancel_check{$index}" name="{$item.user_id}" style="float: right"
+                        class="btn btn-warning btn-mini">取消质检</a>
+                      <span style="float: right;margin:0 10px">质检员</span>{else} <a id="set_check{$index}" name="{$item.user_id}"
+                        style="float: right" class="btn btn-primary btn-mini">设为质检</a>
+                      <span style="float: right;margin:0 10px">标注员</span>{/if}</td>
+                  </tr>
+                  {/foreach}
+                </tbody>
+              </table>
+
+            </div>
+          </div>
+          {/if}
+
+
+        </div>
+      </div>
+    </div>
+  </div>
+  {include file="common/footer" /}
+  <script src="js/jquery.min.js"></script>
+  <script>
+    $(function () {
+          $("#guild").attr('class', 'active');
+          $('#guild_company').css('display', 'none');
+          $('#re_create_guild').css('display', 'none');
+
+          $("#re_create").click(function() {
+            $("#re_create_guild").removeAttr("style", "");
+            
+          })
+
+          var get_guild_member_num = {$get_guild_member|count};
+          for (let i = 0; i <= get_guild_member_num; i++) {
+            $("#cancel_check" + i).click(function (e) {
+              var user_id_set = e.target.name; 
+              $.ajax({
+                  url: "set_check",
+                  data: {
+                    "is_check": 0,
+                    "user_id_set":user_id_set
+                  },
+                  type: "POST",
+                  success: function (res) {
+                    if(res.code == 1)
+                    {
+                      alert(res.msg);
+                      location.reload();
+                    }
+                    else
+                    {
+                      alert(res.msg);
+                    }
+
+                  }
+
+                })
+
+            })
+
+            $("#set_check" + i).click(function (e) {
+              var user_id_set = e.target.name; 
+                $.ajax({
+                  url: "set_check",
+                  data: {
+                    "is_check": 1,
+                    "user_id_set":user_id_set
+                  },
+                  type: "POST",
+                  success: function (res) {
+                    if(res.code == 1)
+                    {
+                      alert(res.msg);
+                      location.reload();
+                    }
+                    else
+                    {
+                      alert(res.msg);
+                    }
+
+                  }
+
+                })
+
+              })
+
+
+            }
+
+              $('#guild_search').click(function () {
+                var search_words = $('#search_words').val();
+                if (search_words == '') {
+                  location.href = 'guild';
+                } else {
+                  location.href = 'guild?search=1&search_words=' + search_words;
+                }
+              })
+
+
+              $('#re_join2').click(function (e) {
+                var guild_id = e.target.name;
+                $.ajax({
+                  url: "join_guild",
+                  data: {
+                    "guild_id": guild_id
+                  },
+                  type: "POST",
+                  success: function (res) {
+                    if (res.code == 0) {
+                      alert(res.msg);
+                    } else if (res.code == 1) {
+                      alert(res.msg);
+                      location.reload();
+                    } else if (res.code == 2) {
+                      alert(res.msg);
+                    } else if (res.code == 3) {
+                      alert(res.msg);
+                    }
+                  }
+                })
+              })
+
+              $('#re_join').click(function (e) {
+                var guild_id = e.target.name;
+                $.ajax({
+                  url: "join_guild",
+                  data: {
+                    "guild_id": guild_id
+                  },
+                  type: "POST",
+                  success: function (res) {
+                    if (res.code == 0) {
+                      alert(res.msg);
+                    } else if (res.code == 1) {
+                      alert(res.msg);
+                      location.reload();
+                    } else if (res.code == 2) {
+                      alert(res.msg);
+                    } else if (res.code == 3) {
+                      alert(res.msg);
+                    }
+                  }
+                })
+              })
+
+
+              $('#re_submit').click(function (e) {
+                var guild_id = e.target.name;
+                var company_name = $('#re_company_name').val();
+                var company_introduce = $('#re_company_introduce').val();
+                var contact_name = $('#re_contact_name').val();
+                var contact_phone = $('#re_contact_phone').val();
+                var contact_email = $('#re_contact_email').val();
+                var contact_wechat = $('#re_contact_wechat').val();
+                var guild_name = $('#re_guild_name').val();
+                var guild_introduce = $('#re_guild_introduce').val();
+                var business_license = $('#re_business_license').val();
+                var bank_account = $('#re_bank_acount').val();
+                var guild_experience = $('#re_guild_experience').val();
+                var guild_advantage = $('#re_guild_advantage').val();
+                var guild_demeanor = $('#re_guild_demeanor').val();
+                if (company_name == '') {
+                  alert('亲亲，公司名不能为空哦~');
+                  return;
+                }
+                if (bank_account == '') {
+                  alert('亲亲，银行开户证明不能为空哦~');
+                  return;
+                }
+                if (business_license == '') {
+                  alert('亲亲，营业执照不能为空哦~');
+                  return;
+                }
+
+                if (guild_demeanor == '') {
+                  alert('亲亲，团队风采不能为空哦~');
+                  return;
+                }
+                if (company_introduce == '') {
+                  alert('亲亲，公司介绍不能为空哦~');
+                  return;
+                }
+                if (contact_name == '') {
+                  alert('亲亲，联系人不能为空哦~');
+                  return;
+                }
+                if (contact_phone == '') {
+                  alert('亲亲，联系人电话不能为空哦~');
+                  return;
+                }
+                if (contact_email == '') {
+                  alert('亲亲，联系人邮箱不能为空哦~');
+                  return;
+                }
+                if (contact_wechat == '') {
+                  alert('亲亲，联系人微信不能为空哦~');
+                  return;
+                }
+                if (guild_name == '') {
+                  alert('亲亲，公会名称不能为空哦~');
+                  return;
+                }
+                if (guild_introduce == '') {
+                  alert('亲亲，公会介绍不能为空哦~');
+                  return;
+                }
+           
+      
+                var fd = new FormData();
+                fd.append("upload", 3);
+                fd.append("business_license", $("#re_business_license").get(0).files[0]);
+                fd.append("bank_account", $("#re_bank_account").get(0).files[0]);
+                fd.append("guild_demeanor", $("#re_guild_demeanor").get(0).files[0]);
+                $.ajax({
+                  url: "upload_guild_img",
+                  type: "POST",
+                  data: fd,
+                  processData: false,
+                  contentType: false,
+                  success: function (res) {
+                    if (res.code == 0) {
+                      alert(res.msg);
+                      return;
+                    }
+                    var imgurl_business_license = res.imgurl_business_license;
+                    var imgurl_bank_account = res.imgurl_bank_account;
+                    var guild_demeanor = res.guild_demeanor;
+                    $.ajax({
+                      url: "re_create_guild",
+                      data: {
+                        "guild_id":guild_id,
+                        "company_name": company_name,
+                        "company_introduce": company_introduce,
+                        'contact_name': contact_name,
+                        'contact_phone': contact_phone,
+                        'contact_email': contact_email,
+                        'contact_wechat': contact_wechat,
+                        'guild_name': guild_name,
+                        'guild_introduce': guild_introduce,
+                        'guild_experience':guild_experience,
+                        "guild_advantage":guild_advantage,
+                        'imgurl_business_license': imgurl_business_license,
+                        'imgurl_bank_account': imgurl_bank_account,
+                        "guild_demeanor":guild_demeanor
+                      },
+                      type: "POST",
+                      success: function (res) {
+                        if (res.code == 1) {
+                          alert(res.msg);
+                          location.reload();
+                        } else if (res.code == 0 || res.code == 2 || res.code == 3) {
+                          alert(res.msg)
+                        }
+                      }
+                    })
+                  }
+                });
+              })
+
+
+
+
+
+              $('#submit').click(function () {
+                var company_name = $('#company_name').val();
+                var company_introduce = $('#company_introduce').val();
+                var contact_name = $('#contact_name').val();
+                var contact_phone = $('#contact_phone').val();
+                var contact_email = $('#contact_email').val();
+                var contact_wechat = $('#contact_wechat').val();
+                var guild_name = $('#guild_name').val();
+                var guild_introduce = $('#guild_introduce').val();
+                var business_license = $('#business_license').val();
+                var bank_account = $('#bank_acount').val();
+                var guild_experience = $('#guild_experience').val();
+                var guild_advantage = $('#guild_advantage').val();
+                var guild_demeanor = $('#guild_demeanor').val();
+                if (company_name == '') {
+                  alert('亲亲，公司名不能为空哦~');
+                  return;
+                }
+                if (bank_account == '') {
+                  alert('亲亲，银行开户证明不能为空哦~');
+                  return;
+                }
+                if (business_license == '') {
+                  alert('亲亲，营业执照不能为空哦~');
+                  return;
+                }
+
+                if (guild_demeanor == '') {
+                  alert('亲亲，团队风采不能为空哦~');
+                  return;
+                }
+                if (company_introduce == '') {
+                  alert('亲亲，公司介绍不能为空哦~');
+                  return;
+                }
+                if (contact_name == '') {
+                  alert('亲亲，联系人不能为空哦~');
+                  return;
+                }
+                if (contact_phone == '') {
+                  alert('亲亲，联系人电话不能为空哦~');
+                  return;
+                }
+                if (contact_email == '') {
+                  alert('亲亲，联系人邮箱不能为空哦~');
+                  return;
+                }
+                if (contact_wechat == '') {
+                  alert('亲亲，联系人微信不能为空哦~');
+                  return;
+                }
+                if (guild_name == '') {
+                  alert('亲亲，公会名称不能为空哦~');
+                  return;
+                }
+                if (guild_introduce == '') {
+                  alert('亲亲，公会介绍不能为空哦~');
+                  return;
+                }
+           
+      
+                var fd = new FormData();
+                fd.append("upload", 3);
+                fd.append("business_license", $("#business_license").get(0).files[0]);
+                fd.append("bank_account", $("#bank_account").get(0).files[0]);
+                fd.append("guild_demeanor", $("#guild_demeanor").get(0).files[0]);
+                $.ajax({
+                  url: "upload_guild_img",
+                  type: "POST",
+                  data: fd,
+                  processData: false,
+                  contentType: false,
+                  success: function (res) {
+                    if (res.code == 0) {
+                      alert(res.msg);
+                      return;
+                    }
+                    var imgurl_business_license = res.imgurl_business_license;
+                    var imgurl_bank_account = res.imgurl_bank_account;
+                    var guild_demeanor = res.guild_demeanor;
+                    console.log(guild_demeanor);
+                    $.ajax({
+                      url: "create_guild",
+                      data: {
+                        "company_name": company_name,
+                        "company_introduce": company_introduce,
+                        'contact_name': contact_name,
+                        'contact_phone': contact_phone,
+                        'contact_email': contact_email,
+                        'contact_wechat': contact_wechat,
+                        'guild_name': guild_name,
+                        'guild_introduce': guild_introduce,
+                        'guild_experience':guild_experience,
+                        "guild_advantage":guild_advantage,
+                        'imgurl_business_license': imgurl_business_license,
+                        'imgurl_bank_account': imgurl_bank_account,
+                        "guild_demeanor":guild_demeanor
+                      },
+                      type: "POST",
+                      success: function (res) {
+                        if (res.code == 1) {
+                          alert(res.msg);
+                          location.reload();
+                        } else if (res.code == 0 || res.code == 2 || res.code == 3) {
+                          alert(res.msg)
+                        }
+                      }
+                    })
+                  }
+                });
+              })
+
+              var join_msg_num = {$join_msg_num};
+              for (let i = 1; i <= join_msg_num; i++) {
+                $('#join_agree' + i).click(function (e) {
+                  var join_user_id = e.target.name;
+                  $.ajax({
+                    url: "join_check",
+                    data: {
+                      "join_user_id": join_user_id,
+                      'agree': 1
+                    },
+                    type: "POST",
+                    success: function (res) {
+                      if (res.code == 1) {
+                        alert(res.msg);
+                        location.reload();
+                      } else if (res.code == 0) {
+                        alert(res.msg);
+                      }
+                    }
+                  })
+                })
+
+                $('#join_reject' + i).click(function (e) {
+                  var join_user_id = e.target.name;
+                  $.ajax({
+                    url: "join_check",
+                    data: {
+                      "join_user_id": join_user_id,
+                      'agree': 0
+                    },
+                    type: "POST",
+                    success: function (res) {
+                      if (res.code == 1) {
+                        alert(res.msg);
+                        location.reload();
+                      } else if (res.code == 0) {
+                        alert(res.msg);
+                      }
+
+                    }
+                  })
+                })
+              }
+
+              var guild_num = {$guild_num};
+              for (let i = 1; i <= guild_num; i++) {
+                $('#join_guild' + i).click(function (e) {
+                  var guild_id = e.target.name;
+                  $.ajax({
+                    url: "join_guild",
+                    data: {
+                      "guild_id": guild_id
+                    },
+                    type: "POST",
+                    success: function (res) {
+                      if (res.code == 0) {
+                        alert(res.msg);
+                      } else if (res.code == 1) {
+                        alert(res.msg);
+                        location.reload();
+                      } else if (res.code == 2) {
+                        alert(res.msg);
+                      } else if (res.code == 3) {
+                        alert(res.msg);
+                      }
+                    }
+                  })
+                })
+              }
+
+              $('#quit_guild2').click(function (e) {
+                var guild_id = e.target.name;
+                $.ajax({
+                  url: "quit_guild",
+                  data: {
+                    "quild_id": guild_id
+                  },
+                  type: "POST",
+                  success: function (res) {
+                    if (res.code == 0) {
+                      alert(res.msg);
+                    } else if (res.code == 1) {
+                      alert(res.msg);
+                      location.reload();
+                    } else if (res.code == 2) {
+                      alert(res.msg);
+                    }
+                  }
+                })
+              })
+
+
+              $('#quit_guild').click(function (e) {
+                var guild_id = e.target.name;
+                $.ajax({
+                  url: "quit_guild",
+                  data: {
+                    "guild_id": guild_id
+                  },
+                  type: "POST",
+                  success: function (res) {
+                    if (res.code == 0) {
+                      alert(res.msg);
+                    } else if (res.code == 1) {
+                      alert(res.msg);
+                      location.reload();
+                    } else if (res.code == 2) {
+                      alert(res.msg);
+                    }
+                  }
+                })
+
+              })
+
+              $('#create_guild').click(function () {
+                $("#guild_company").removeAttr("style", "");
+              })
+
+            })
+  </script>
+
+  <script src="js/jquery.ui.custom.js"></script>
+  <script src="js/bootstrap.min.js"></script>
+  <script src="js/bootstrap-colorpicker.js"></script>
+  <script src="js/bootstrap-datepicker.js"></script>
+  <script src="js/jquery.toggle.buttons.html"></script>
+  <script src="js/masked.js"></script>
+  <script src="js/jquery.uniform.js"></script>
+  <script src="js/select2.min.js"></script>
+  <script src="js/matrix.js"></script>
+  <script src="js/matrix.form_common.js"></script>
+  <script src="js/wysihtml5-0.3.0.js"></script>
+  <script src="js/jquery.peity.min.js"></script>
+  <script src="js/bootstrap-wysihtml5.js"></script>
+</body>
+
+</html>

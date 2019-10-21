@@ -1,0 +1,422 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>西红柿数据-我要赚钱-任务中心</title>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<link rel="stylesheet" href="css/bootstrap.min.css" />
+<link rel="stylesheet" href="css/bootstrap-responsive.min.css" />
+<link rel="stylesheet" href="css/colorpicker.css" />
+<link rel="stylesheet" href="css/datepicker.css" />
+<link rel="stylesheet" href="css/uniform.css" />
+<link rel="stylesheet" href="css/select2.css" />
+<link rel="stylesheet" href="css/matrix-style.css" />
+<link rel="stylesheet" href="css/matrix-media.css" />
+<link rel="stylesheet" href="css/bootstrap-wysihtml5.css" />
+<link href="font-awesome/css/font-awesome.css" rel="stylesheet" />
+<link href='http://fonts.googleapis.com/css?family=Open+Sans:400,700,800' rel='stylesheet' type='text/css'>
+</head>
+<body>
+      {include file="common/topheader" /}
+
+      {include file="common/sidebar" /}
+<div id="content">
+<div id="content-header">
+ 
+</div>
+<div class="container-fluid">
+        <hr/>
+  <div class="row-fluid">
+    <div class="span6">
+   
+      
+      <div class="widget-box">
+        <div class="widget-title"> <span class="icon"> <i class="icon-align-justify"></i> </span>
+          <h5>筛选任务</h5>
+        </div>
+        <div class="widget-content nopadding">
+
+          <form class="form-horizontal">
+            
+            <div class="control-group">
+              <label class="control-label">任务范围</label>
+              <div class="controls" style="width:200px">
+                <select id="task_range">
+                  <option>全部</option>
+                  <option>个人任务</option>
+                  <option>公会任务</option>
+                </select>
+              </div>
+            </div>
+
+            <div class="control-group">
+                <label class="control-label">任务类型</label>
+                <div class="controls"  style="width:200px">
+                  <select id="task_type" >
+                    <option>全部</option>
+                    <option>文字识别</option>
+                    <option>语音识别</option>
+                  </select>
+                </div>
+              </div>
+              <label class="control-label">任务名称</label>
+              <div class="controls controls-row" >
+                    <input id="task_name" type="text" style="width:180px" placeholder="" class="span3 m-wrap">
+                  </div>
+    
+          </form>
+              
+          <div class="form-actions">
+            <button id="searchtask"  class="btn btn-success" style="margin-left: 200px">查询</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+
+    <div class="span6">
+   
+      <div class="widget-box">
+        <div class="widget-title"> <span class="icon"> <i class="icon-align-justify"></i> </span>
+          <h5>我的任务</h5>
+        </div>
+        <div class="widget-content nopadding collapse in" id="collapseG2">
+      
+            <ul class="recent-posts">
+              {if $create}
+              {foreach name="my_task" item="item" index="index"}
+         
+              <li>
+                  <div class="fr"><a href="task_manage?task_id={$item.task_id}" class="btn btn-success btn-mini">管理任务</a> <a id="my_task_delete{$index}" name='{$item.task_id}'  class="btn btn-danger btn-mini">删除</a></div>
+                  <div class="article-post"> <span> 任务名称：{$item.task_name}</span> <span>任务期限：{$item.task_timelimit}</span></br>
+                  </div>
+                </li>
+                {/foreach}
+
+
+              {elseif $is_check}
+              {foreach name="my_task" item="item" index="index"}
+         
+              <li>
+                  <div class="fr"><a href="task_check?task_id={$item.task_id}&guild_id={$guild_id}" class="btn btn-success btn-mini">去质检</a></div>
+                  <div class="article-post"> <span> 任务名称：{$item.task_name}</span> <span>任务期限：{$item.task_timelimit}</span></br>
+                  </div>
+                </li>
+                {/foreach}
+              {else}
+
+                {foreach name="my_task" item="item" index="index"}
+              <li>
+                  <div class="fr"> <a href="mark?task_id={$item.task_id}" class="btn btn-success btn-mini">做任务</a> <a  id="my_task_delete{$index}" name='{$item.task_id}'  class="btn btn-danger btn-mini">删除</a></div>
+                  <div class="article-post"> <span> 任务名称：{$item.task_name}</span> <span>任务期限：{$item.task_timelimit}</span></br>
+                  
+                  </div>
+                </li>
+                {/foreach}
+                {/if}
+            </ul>
+          </div>
+      </div>
+    </div>
+
+    <div class="widget-box">
+      <div class="widget-title"> <span class="icon"><i class="icon-th"></i></span>
+        <h5>任务列表</h5>
+      </div>
+      <div class="widget-content nopadding">
+        <table id = 'task' class="table table-bordered data-table">
+          <thead>
+            <tr>
+              <th>任务名称</th>
+              <th>创建时间</th>
+              <th>任务范围</th>
+              <th>任务类型</th>
+              <th>任务期限</th>
+              <th>任务数量</th>
+              <th>任务介绍</th>
+              <th>任务标准</th>
+              <th>标注文档</th>
+              <th>操作</th>
+            </tr>
+          </thead>
+          <tbody>
+              <?php  
+              $i = 0;
+              ?>
+              {foreach name="task" item="item" index="index"}
+              <tr class="gradeX">
+                  <td>{$item.task_name}</td>
+                  <td>{$item.task_time}</td>
+                  <td>{$item.task_range}</td>
+                  <td>{$item.task_type}</td>
+                  <td>{$item.task_timelimit}</td>
+                  <td>{$item.task_number}</td>
+                  <td>{$item.task_introduce}</td>
+                  <td>{$item.task_standard}</td>
+                  <td><a href="/public/static/doc/{$item.doc_url}" class="icon-download-alt"></a></td>
+                  <td>
+                    {if $receive_task_user}
+                    {foreach name="receive_task_user" item="titem"}
+                    <?php  
+                    $i = 0;
+                    ?>
+                    {if $titem.task_id == $item.task_id}
+                    <?php  
+                    $i = 1;
+                    break; ?>
+                    {else}
+                    <?php
+                    $i = 2;
+                    ?>
+                    {/if}
+                    {/foreach}
+
+                    {else}
+                    <?php
+                      $i = 3;
+                    ?>
+                    {/if}
+
+              
+                      {if $i==1}
+                      <a id="received{$index}" class="btn btn-mini">已领取</a>
+
+                      {elseif $i==2 || $i==3}
+                      <a id="receive{$index}" name="{$item.task_id}" class="btn btn-success btn-mini">领取</a>
+                      {/if}
+                  
+                  </td>
+                </tr>    
+          {/foreach}
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+
+
+   
+  </div>
+</div></div>
+{include file="common/footer" /}
+<script src="js/jquery.min.js"></script> 
+
+<script>
+  
+  $(function(){
+    $("#task_center").attr('class','active');
+
+    var task_num = {$task_num};
+    console.log(task_num);
+    for(let i = 1;i<=task_num;i++)
+    {
+      $('#receive' + i).click(function(e){
+        var task_id = e.target.name;
+     $.ajax({
+        url:"receive_task",
+        data:{
+	      "task_id":task_id
+	        },
+         type:"POST",  
+         success:function(res){
+  if(res.code == 1)
+  {
+    alert(res.msg);
+    location.reload();
+  }
+  else if(res.code == 10)
+  {
+    alert(res.msg);
+    location.href='login';
+  }
+  else
+  {
+    alert(res.msg);
+  }
+      //   console.log(res);
+         }
+      })
+
+   })
+
+   $('#received' + i).click(function(){
+      alert('亲亲，您已经领取过这个任务啦~');
+   })
+    }
+
+
+    var my_task_num = {$my_task_num};
+    for(let i = 1;i<=my_task_num;i++)
+    {
+      $('#my_task_delete' + i).click(function(e){
+      if(confirm('确定删除该任务吗？'))
+      {
+
+      var task_id = e.target.name;
+      $.ajax({
+        url:"my_task_delete",
+        data:{
+	      "task_id":task_id
+	        },
+         type:"POST",  
+         success:function(res){
+  //console.log(res);
+  if(res.code == 1)
+  {
+    alert(res.msg);
+    location.reload();
+  }
+  else if(res.code == 0)
+  {
+    alert(res.msg);
+  }
+  else if(res.code == 10)
+  {
+    alert(res.msg);
+    location.href='login';
+  }
+         }
+      })
+    }
+
+    })
+
+    }
+   
+  
+    $('#searchtask').click(function(){
+      var task_range = $('#task_range').val();
+      var task_type = $('#task_type').val();
+      var task_name = $('#task_name').val();
+      $.ajax({
+        url:"task",
+        data:{
+	      "task_range":task_range,
+			  "task_type":task_type,
+        "task_name":task_name
+	        },
+         type:"POST",  
+         success:function(res){
+  var task = res;
+  //console.log(task);
+  $.ajax({
+        url:"get_task_center",
+        data:{
+	        },
+         type:"POST",  
+         success:function(res){
+  if(res.code == 10)
+  {
+    alert(res.msg);
+    location.href='login';
+  }
+  console.log(res);
+  var my_task_center = res;
+  if(task.length == 0)
+  {
+    $("#task  tr:not(:first)").empty("");
+  }
+  else
+  {
+    var m = 0;
+    $("#task  tr:not(:first)").empty("");
+    for(let i = 0;i<task.length;i++)
+    {
+      $("#task>tbody:last").append("<tr>");
+          $("#task>tbody:last").append("<td>"+ task[i]['task_name']+"</td> <td>"+ task[i]['task_time']+"</td><td>"+ task[i]['task_range']+"</td><td>"+ task[i]['task_type']+
+          "</td><td>"+ task[i]['task_timelimit']+"</td><td>"+ task[i]['task_number']+
+            "</td> <td>"+ task[i]['task_introduce']+"</td> <td>"+ task[i]['task_standard']+
+            "</td>  <td><a href='/public/static/doc/"+ task[i]['doc_url'] + "' class='icon-download-alt'></a></td>");
+            for(let j=0;j<my_task_center.length;j++)
+            {
+           if(task[i]['task_id'] == my_task_center[j]['task_id'])
+            {
+              m = 1;
+              break;        
+            }
+            else
+            {
+             m = 2;
+            }
+
+          } 
+          if(m == 1)
+          {
+            $("#task>tbody:last").append("<td><a id='received"+ i + "' class='btn btn-mini'>已领取</a></td>");
+          }
+          else if(m == 2)
+          {
+          
+           $("#task>tbody:last").append("<td> <a id='receive" + i + "' name='" + task[i]['task_id'] +"' class='btn btn-success btn-mini'>领取</a></td>");
+          }
+            $("#task>tbody:last").append("</tr>");
+
+              }
+       }
+
+       
+    var task_num = task.length;
+    for(let i = 0;i<=task_num;i++)
+    {
+      $('#receive' + i).click(function(e){
+        var task_id = e.target.name;
+        console.log(task_id);
+     $.ajax({
+        url:"receive_task",
+        data:{
+	      "task_id":task_id
+	        },
+         type:"POST",  
+         success:function(res){
+  if(res.code == 1)
+  {
+    alert(res.msg);
+    location.reload();
+  }
+  else if(res.code == 10)
+  {
+    alert(res.msg);
+    location.href='login';
+  }
+  else
+  {
+    alert(res.msg);
+  }
+         console.log(res);
+         }
+      })
+
+   })
+
+   $('#received' + i).click(function(){
+      alert('亲亲，您已经领取过这个任务啦~');
+   })
+    }
+     }
+  })
+
+   
+    }
+  })
+})
+  })
+</script>
+
+
+<script src="js/jquery.ui.custom.js"></script> 
+<script src="js/bootstrap.min.js"></script> 
+<script src="js/bootstrap-colorpicker.js"></script> 
+<script src="js/bootstrap-datepicker.js"></script> 
+<script src="js/jquery.toggle.buttons.html"></script> 
+<script src="js/masked.js"></script> 
+<script src="js/jquery.uniform.js"></script> 
+<script src="js/select2.min.js"></script> 
+<script src="js/matrix.js"></script> 
+<script src="js/jquery.dataTables.min.js"></script> 
+<script src="js/matrix.tables.js"></script>
+<script src="js/matrix.form_common.js"></script> 
+<script src="js/wysihtml5-0.3.0.js"></script> 
+<script src="js/jquery.peity.min.js"></script> 
+<script src="js/bootstrap-wysihtml5.js"></script> 
+</body>
+</html>

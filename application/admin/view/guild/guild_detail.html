@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<title>西红柿数据-后台管理-公会管理</title>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<link rel="stylesheet" href="/css/pictureViewer.css">
+<link rel="stylesheet" href="/css/bootstrap.min.css" />
+<link rel="stylesheet" href="/css/bootstrap-responsive.min.css" />
+<link rel="stylesheet" href="/css/colorpicker.css" />
+<link rel="stylesheet" href="/css/datepicker.css" />
+<link rel="stylesheet" href="/css/uniform.css" />
+<link rel="stylesheet" href="/css/select2.css" />
+<link rel="stylesheet" href="/css/matrix-style.css" />
+<link rel="stylesheet" href="/css/matrix-media.css" />
+<link rel="stylesheet" href="/css/bootstrap-wysihtml5.css" />
+<link href="/font-awesome/css/font-awesome.css" rel="stylesheet" />
+<link href='http://fonts.googleapis.com/css?family=Open+Sans:400,700,800' rel='stylesheet' type='text/css'>
+
+</head>
+<body>
+    {include file="common/topheader" /}
+
+    {include file="common/sidebar" /}
+
+<div id="content">
+<div id="content-header">
+ 
+</div>
+<div class="container-fluid">
+        <hr/>
+  <div class="row-fluid">
+      <div class="span7">
+
+          <div class="widget-box">
+              <div class="widget-title"> <span class="icon"> <i class="icon-align-justify"></i> </span>
+                <h5>公会任务</h5>
+              </div>
+              <div class="widget-content nopadding collapse in" id="collapseG2">
+            
+                  <ul class="recent-posts">
+    
+                      {foreach name="get_guild_task" item="item" index="index"}
+                    <li>
+                        <div class="fr"> <a href="admin_task_check?task_id={$item.task_id}&guild_id={$guild_id}" class="btn btn-success btn-mini">去质检</a> <a  id="my_task_delete{$index}" name='{$item.task_id}'  class="btn btn-danger btn-mini">删除</a></div>
+                        <div class="article-post"> <span> 任务名称：{$item.task_name}</span> <span>任务期限：{$item.task_timelimit}</span></br>
+                   
+                        </div>
+                      </li>
+                      {/foreach}
+                  </ul>
+                </div>
+            </div>
+        </div>
+
+
+        <div class="span4">
+
+            <div class="widget-box">
+                <div class="widget-title"> <span class="icon"> <i class="icon-file"></i> </span>
+                  <h5>公会人员</h5>
+                  <div class="fr" style="margin: 7px"> <a href="admin_guild" class="btn btn-warning btn-mini">返回</a></div>
+                </div>
+                <div class="widget-content nopadding">
+                  
+                  <ul class="recent-posts">
+                    <li>
+                      
+                      <div class="article-post">
+                        <p>
+                          <div class="widget-content nopadding">
+                          <table class="table table-bordered table-striped">
+                              <thead>
+                                <tr>
+                                  <th>用户名</th>
+                                  <th>姓名</th>
+                                </tr>
+                              </thead>
+                              <tbody>
+                          {foreach name="get_user" item="item"}
+                                <tr class="odd gradeX">
+                                  <td>{$item.user_name}</td>
+                                  <td>{$item.name}</td>
+                          {/foreach}
+                        </tr>
+                      </tbody>
+                    </table>
+                  </div>
+                        </p>   
+                      </div>
+                    </li>
+                  </ul>
+                </div>
+              </div>
+      
+              <div class="widget-box">
+                  <div class="widget-title"> <span class="icon"> <i class="icon-file"></i> </span>
+                    <h5>公会资料</h5>
+                  </div>
+                  <div class="widget-content nopadding">
+                    <ul class="recent-posts">
+                     
+                
+                          <li>
+                          <div>
+                              申请时间：{$guild_detail.0.guild_time}
+                              <h6>公会信息</h6>
+                    公会名称：{$guild_detail.0.guild_name} &nbsp;
+                    公会介绍：{$guild_detail.0.guild_introduce}
+                    <h6>公司信息</h6>
+                    公司名称：{$guild_detail.0.company_name} &nbsp;
+                    公司介绍：{$guild_detail.0.company_introduce} <br />
+                 
+                   
+                    <div class="image-list">
+                    营业执照：<div class="cover"> <img src="/public/static/img/{$guild_detail.0.imgurl_business_license}"></img></div>
+                    银行开户证明：<div class="cover"><img src="/public/static/img/{$guild_detail.0.imgurl_bank_account}" ></img></div>
+                    </div>
+                    <h6>联系人信息</h6>
+                    姓名：{$guild_detail.0.contact_name} &nbsp;
+                    电话：{$guild_detail.0.contact_phone} &nbsp;
+                    邮箱：{$guild_detail.0.contact_email} &nbsp;
+                    微信：{$guild_detail.0.contact_wechat}
+                          </div>
+                        </li>
+                    </ul>
+                  </div>
+                </div>
+
+
+           
+        </div>
+
+
+
+    <div class="span6">
+    
+
+    </div>
+  </div>
+</div></div>
+{include file="common/footer" /}
+<script src="/js/jquery.min.js"></script>
+<script src="/js/jquery.mousewheel.min.js"></script>
+<script src="/js/pictureViewer.js"></script>
+<script>
+  $(function(){
+    $("#admin_guild").attr("class","active");
+
+    $('.image-list').on('click', '.cover', function () {
+		var this_ = $(this);
+		var images = this_.parents('.image-list').find('.cover');
+		var imagesArr = new Array();
+		$.each(images, function (i, image) {
+			imagesArr.push($(image).children('img').attr('src'));
+		});
+		$.pictureViewer({
+			images: imagesArr, //需要查看的图片，数据类型为数组
+			initImageIndex: this_.index() + 1, //初始查看第几张图片，默认1
+			scrollSwitch: true //是否使用鼠标滚轮切换图片，默认false
+		});
+  });
+  
+
+
+  })
+
+</script>
+<!-- <script src="js/jquery.min.js"></script> -->
+
+
+
+
+<script src="/js/jquery.ui.custom.js"></script> 
+<script src="/js/bootstrap.min.js"></script> 
+<script src="/js/bootstrap-colorpicker.js"></script> 
+<script src="/js/bootstrap-datepicker.js"></script> 
+<script src="/js/jquery.toggle.buttons.html"></script> 
+<script src="/js/masked.js"></script> 
+<script src="/js/jquery.uniform.js"></script> 
+<script src="/js/select2.min.js"></script> 
+<script src="/js/matrix.js"></script> 
+<script src="/js/matrix.form_common.js"></script> 
+<script src="/js/wysihtml5-0.3.0.js"></script> 
+<script src="/js/jquery.peity.min.js"></script> 
+<script src="/js/bootstrap-wysihtml5.js"></script> 
+<script>
+	$('.textarea_editor').wysihtml5();
+</script>
+</body>
+</html>

@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<title>西红柿数据-后台管理-公会管理</title>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<link rel="stylesheet" href="/css/pictureViewer.css">
+<link rel="stylesheet" href="/css/bootstrap.min.css" />
+<link rel="stylesheet" href="/css/bootstrap-responsive.min.css" />
+<link rel="stylesheet" href="/css/colorpicker.css" />
+<link rel="stylesheet" href="/css/datepicker.css" />
+<link rel="stylesheet" href="/css/uniform.css" />
+<link rel="stylesheet" href="/css/select2.css" />
+<link rel="stylesheet" href="/css/matrix-style.css" />
+<link rel="stylesheet" href="/css/matrix-media.css" />
+<link rel="stylesheet" href="/css/bootstrap-wysihtml5.css" />
+<link href="/font-awesome/css/font-awesome.css" rel="stylesheet" />
+<link href='http://fonts.googleapis.com/css?family=Open+Sans:400,700,800' rel='stylesheet' type='text/css'>
+
+</head>
+<body>
+    {include file="common/topheader" /}
+    
+    {include file="common/sidebar" /}
+
+<div id="content">
+<div id="content-header">
+ 
+</div>
+<div class="container-fluid">
+        <hr/>
+  <div class="row-fluid">
+      <div class="span7">
+
+          <div class="widget-box">
+            <div class="widget-title"> <span class="icon"> <i class="icon-file"></i> </span>
+              <h5>推荐公会</h5>
+              <div style="text-align: center">
+                <input type="text" id="search_words" value="{$search_words}"
+                  style="width: 330px; height: 20px;margin-top: 3px" placeholder="请输入公会名称" />
+                <button id="guild_search" type="submit" style="margin-bottom: 7px;height: 30px;width: 30px"
+                  class="tip-bottom" title="搜索"><i class="icon-search icon-white"></i></button>
+              </div>
+            </div>
+            <div id="guild" class="widget-content nopadding">
+              <ul class="recent-posts">
+                {foreach name="guild" item="item" index="index"}
+                <li>
+                  <div class="article-post">
+                    <div class="fr">
+
+                      <a href="admin_guild_detail?guild_id={$item.guild_id}" class="btn btn-success btn-mini">公会详情</a>
+       
+                    </div>
+                    <p> 公会名称：{$item.guild_name}</p>
+                    <p>公会人数：{$item.people_number}</p>
+                    <span>公会简介：{$item.guild_introduce}</span>
+                  </div>
+                </li>
+                {/foreach}
+                </li>
+              </ul>
+            </div>
+          </div>
+
+          
+        </div>
+
+
+
+
+
+    <div class="span4">
+            <div class="widget-box">
+                    <div class="widget-title"> <span class="icon"> <i class="icon-file"></i> </span>
+                      <h5>公会审核</h5>
+                    </div>
+                    <div class="widget-content nopadding">
+                      <ul class="recent-posts">
+                       
+                            {foreach name="guild_check" item="item" index="index"}
+                            <li>
+                            <div>
+                                <div class="fr"><a id="guild_agree{$index}" name='{$item.guild_id}' class="btn btn-success btn-mini">同意</a> <a id="guild_reject{$index}" name='{$item.guild_id}' class="btn btn-danger btn-mini">拒绝</a></div>
+                                申请时间：{$item.guild_time}
+                                <h6>公会信息</h6>
+                      公会名称：{$item.guild_name} &nbsp;
+                      公会介绍：{$item.guild_introduce}
+                      公会优势：{$item.guild_advantage}
+                      项目经历：{$item.guild_experience}
+                      <h6>公司信息</h6>
+                      公司名称：{$item.company_name} &nbsp;
+                      公司介绍：{$item.company_introduce} <br />
+                   
+                     
+                      <div class="image-list">
+                      营业执照：<div class="cover"> <img src="/public/static/img/{$item.imgurl_business_license}"></img></div>
+                      银行开户证明：<div class="cover"><img src="/public/static/img/{$item.imgurl_bank_account}" ></img></div>
+                      公会风采：<div class="cover"><img src="/public/static/img/{$item.guild_demeanor}" ></img></div>
+                      </div>
+                      <h6>联系人信息</h6>
+                      姓名：{$item.contact_name} &nbsp;
+                      电话：{$item.contact_phone} &nbsp;
+                      邮箱：{$item.contact_email} &nbsp;
+                      微信：{$item.contact_wechat}
+                            </div>
+                          </li>
+                            {/foreach}
+                      </ul>
+                    </div>
+                  </div>
+    </div>
+    <div class="span4">
+
+    </div>
+  </div>
+</div></div>
+{include file="common/footer" /}
+<script src="/js/jquery.min.js"></script>
+<script src="/js/jquery.mousewheel.min.js"></script>
+<script src="/js/pictureViewer.js"></script>
+<script>
+  $(function(){
+    $("#admin_guild").attr("class","active");
+
+    var guild_check_num = {$guild_check_num};
+    for(let i=1;i<=guild_check_num;i++)
+    {
+    $('#guild_agree'+i).click(function(e){
+      var guild_id = e.target.name;
+$.ajax({
+url:"admin_guild_agree",
+      data:{
+"guild_id":guild_id,
+"agree":1
+},
+     type:"POST",  
+     success:function(res){
+if(res.code==0)
+{
+alert(res.msg);
+}
+else if(res.code==1)
+{
+alert(res.msg);
+location.reload();
+}
+ }
+})
+    })
+
+    $('#guild_reject'+i).click(function(e){
+      var guild_id = e.target.name;
+$.ajax({
+url:"admin_guild_agree",
+      data:{
+"guild_id":guild_id,
+"agree":0
+},
+     type:"POST",  
+     success:function(res){
+if(res.code==0)
+{
+alert(res.msg);
+}
+else if(res.code==1)
+{
+alert(res.msg);
+location.reload();
+}
+ }
+})
+    })
+
+
+
+
+
+    }
+
+    $('.image-list').on('click', '.cover', function () {
+		var this_ = $(this);
+		var images = this_.parents('.image-list').find('.cover');
+		var imagesArr = new Array();
+		$.each(images, function (i, image) {
+			imagesArr.push($(image).children('img').attr('src'));
+		});
+		$.pictureViewer({
+			images: imagesArr, //需要查看的图片，数据类型为数组
+			initImageIndex: this_.index() + 1, //初始查看第几张图片，默认1
+			scrollSwitch: true //是否使用鼠标滚轮切换图片，默认false
+		});
+  });
+  
+
+
+  $('#guild_search').click(function () {
+                var search_words = $('#search_words').val();
+                if (search_words == '') {
+                  location.href = 'admin_guild';
+                } else {
+                  location.href = 'admin_guild?search=1&search_words=' + search_words;
+                }
+              })
+
+
+  })
+
+</script>
+<!-- <script src="js/jquery.min.js"></script> -->
+
+
+
+
+<script src="/js/jquery.ui.custom.js"></script> 
+<script src="/js/bootstrap.min.js"></script> 
+<script src="/js/bootstrap-colorpicker.js"></script> 
+<script src="/js/bootstrap-datepicker.js"></script> 
+<script src="/js/jquery.toggle.buttons.html"></script> 
+<script src="/js/masked.js"></script> 
+<script src="/js/jquery.uniform.js"></script> 
+<script src="/js/select2.min.js"></script> 
+<script src="/js/matrix.js"></script> 
+<script src="/js/matrix.form_common.js"></script> 
+<script src="/js/wysihtml5-0.3.0.js"></script> 
+<script src="/js/jquery.peity.min.js"></script> 
+<script src="/js/bootstrap-wysihtml5.js"></script> 
+<script>
+	$('.textarea_editor').wysihtml5();
+</script>
+</body>
+</html>

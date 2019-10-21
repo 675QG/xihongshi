@@ -1,0 +1,363 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>西红柿数据-我有需求-发布任务</title>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<link rel="stylesheet" href="css/bootstrap.min.css" />
+<link rel="stylesheet" href="css/bootstrap-responsive.min.css" />
+<link rel="stylesheet" href="css/colorpicker.css" />
+<link rel="stylesheet" href="css/datepicker.css" />
+<link rel="stylesheet" href="css/uniform.css" />
+<link rel="stylesheet" href="css/select2.css" />
+<link rel="stylesheet" href="css/matrix-style.css" />
+<link rel="stylesheet" href="css/matrix-media.css" />
+<link rel="stylesheet" href="css/bootstrap-wysihtml5.css" />
+<link href="font-awesome/css/font-awesome.css" rel="stylesheet" />
+<link href='http://fonts.googleapis.com/css?family=Open+Sans:400,700,800' rel='stylesheet' type='text/css'>
+</head>
+<body>
+    {include file="common/topheader" /}
+      <div id="sidebar"><a href="demand" class="visible-phone"><i class="icon icon-home"></i> 控制台</a>
+        <ul>
+          <li><a href="demand"><i class="icon icon-home"></i> <span>控制台</span></a> </li>
+          
+          <li class="active"> <a href="publish" class="active"><i class="icon icon-th-list"></i> <span>任务管理</span> </a>
+          </li>
+          <li><a href="result"><i class="icon icon-pencil"></i> <span>查看结果</span></a></li>
+          </ul>
+        </div>
+<div id="content">
+<div id="content-header">
+ 
+</div>
+<div class="container-fluid">
+        <hr/>
+  <div class="row-fluid">
+    
+
+
+    <div class="span6">
+   
+      <div class="widget-box">
+        <div class="widget-title"> <span class="icon"> <i class="icon-align-justify"></i> </span>
+          <h5>发布任务</h5>
+        </div>
+        <div class="widget-content nopadding">
+
+          <form action="#" method="get" class="form-horizontal">
+                    <div class="control-group">
+                      <label class="control-label">任务名称：</label>
+                      <div class="controls">
+                        <input id="task_name" type="text" maxlength="30" class="span11" placeholder="请输入任务名称" />
+                      </div>
+                    </div>
+
+                    <div class="control-group">
+                        <label class="control-label">任务范围：</label>
+                        <div  class="controls">
+                          <select id="task_range" >
+                            <option>全员任务</option>
+                            <option>公会任务</option>
+                          </select>
+                        </div>
+                      </div>
+          
+                      <div class="control-group">
+                          <label class="control-label">任务类型：</label>
+                          <div class="controls">
+                            <select id="task_type">
+                              <option>文字识别</option>
+                              <option>语音识别</option>
+                            </select>
+                          </div>
+                        </div>
+    
+                    <div class="control-group">
+                        <label class="control-label">标注文档：</label>
+                        <div class="controls">
+                          <input id="doc" accept=".xls,.doc,.docx,.txt,.pdf" type="file" />
+                          <span class="help-block">只能上传doc,docx,txt,xls,pdf格式，大小不超过5M</span>
+                        </div>
+                      </div>
+
+                      
+                    <div class="control-group">
+                      <label class="control-label">源数据：</label>
+                      <div class="controls">
+                        <input id="img_data" accept=".zip" type="file" />
+                        <span class="help-block">只能上传zip格式，大小不超过10M</span>
+                      </div>
+                    </div>
+
+    
+                    <div class="control-group">
+                        <label class="control-label">任务介绍：</label>
+                        <div class="controls">
+                          <textarea id="task_introduce" class="span11" maxlength="100" placeholder="请输入任务介绍"></textarea>
+                        </div>
+                      </div>
+    
+                    <div class="control-group">
+                      <label class="control-label">任务标准：</label>
+                      <div class="controls">
+                        <input id="task_standard" type="text" maxlength="10" class="span11" placeholder="请输入任务标准" />
+                      </div>
+                    </div>
+                    <div class="control-group">
+                      <label class="control-label">任务数量：</label>
+                      <div class="controls">
+                        <input id="task_number" type="text" maxlength="20"  class="span11" placeholder="请输入任务数量"  />
+                      </div>
+                    </div>
+                    <div class="control-group">
+                      <label class="control-label">任务时限：</label>
+                      <div class="controls">
+                        <input id="task_timelimit" type="text" maxlength="30" class="span11" placeholder="请输入任务时限" />
+                      </div>
+                    </div>
+          </form>
+          <div style="margin:20px 0;">
+              <button id="submit" type="submit" class="btn btn-success" style="margin-left: 300px">发布</button>
+            </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="span6">
+        <div class="widget-box">
+            <div class="widget-title"> <span class="icon"><i class="icon-th"></i></span>
+              <h5>任务列表</h5>
+            </div>
+        </div>
+      </div>
+ 
+      <div>
+          <div class="widget-box">
+              <div class="widget-title"> <span class="icon"><i class="icon-th"></i></span>
+                <h5>我的发布</h5>
+              </div>
+              <div class="widget-content nopadding">
+                <table id = 'task' class="table table-bordered data-table">
+                  <thead>
+                    <tr>
+                      <th>任务名称</th>
+                      <th>创建时间</th>
+                      <th>任务范围</th>
+                      <th>任务类型</th>
+                      <th>任务期限</th>
+                      <th>任务数量</th>
+                      <th>任务介绍</th>
+                      <th>任务标准</th>
+                      <th>标注文档</th>
+                      <th>操作</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                      {foreach name="my_publish_task" item="item" index="index"}
+                      <tr class="gradeX">
+                          <td>{$item.task_name}</td>
+                          <td>{$item.task_time}</td>
+                          <td>{$item.task_range}</td>
+                          <td>{$item.task_type}</td>
+                          <td>{$item.task_timelimit}</td>
+                          <td>{$item.task_number}</td>
+                          <td>{$item.task_introduce}</td>
+                          <td>{$item.task_standard}</td>
+                          <td><a href="/public/static/doc/{$item.doc_url}" class="icon-download-alt"></a></td>
+                          <td><a href="change_task?task_id={$item.task_id}" class="btn btn-primary btn-mini">修改</a> <a id="dele_task{$index}" name='{$item.task_id}' class="btn btn-danger btn-mini">删除</a>
+                          {if $item.task_states == 1}
+                          审核通过
+                          {elseif $item.task_states == 0}
+                          审核未通过
+                          {else}
+                          审核中
+                          {/if}
+                          </td>
+
+                        </tr>    
+                  {/foreach}
+                  </tbody>
+                </table>
+              </div>
+  
+          </div>
+        </div>
+      
+
+   
+  </div>
+  
+  
+</div></div>
+{include file="common/footer" /}
+<script src="js/jquery.min.js"></script> 
+<script>
+  $(function(){
+    var my_publish_task_num = {$my_publish_task_num};
+for(let i=0;i<=my_publish_task_num;i++)
+{
+  $('#dele_task'+i).click(function(e){
+    var task_id = e.target.name;
+    if(confirm('亲亲，确定要删除吗？'))
+    {
+    $.ajax({
+    url:"dele_task",
+      data:{
+    "task_id":task_id
+    },
+     type:"POST",  
+     success:function(res){
+  console.log(res);
+  if(res.code == 1)
+  {
+    alert(res.msg);
+    location.reload();
+  }
+  else
+  {
+    alert(res.msg);
+  }
+    } 
+    }) 
+  }
+    })
+
+}
+
+    $('#submit').click(function(){
+      var fd = new FormData();
+fd.append("upload", 1);
+fd.append("img_data", $("#img_data").get(0).files[0]);
+//console.log($("#img_data").get(0).files[0]);
+//return;
+$.ajax({
+     url : "upload_doc",  
+     type : "POST",  
+     data:fd,
+     processData:false,  
+     contentType:false,
+     success : function(res) {
+       var doc_url = res;
+       console.log(doc_url);
+       return;
+       if(res.code == 0)
+       {
+         alert(res.msg);
+         return;
+       }
+      }
+    })
+
+
+
+
+
+
+
+      if(confirm('确定要发布吗？'))
+      {
+      var task_name = $('#task_name').val();
+    var task_range = $('#task_range').val();
+    var task_type = $('#task_type').val();
+    var task_introduce = $('#task_introduce').val();
+    var task_standard = $('#task_standard').val();
+    var task_number = $('#task_number').val();
+    var task_timelimit = $('#task_timelimit').val();
+    var doc = $("#doc").val();
+    if(task_name == '')
+    {
+      alert('亲亲，任务名称不能为空哦~');
+      return;
+    }
+    if(doc == '')
+      {
+        alert('亲亲，标注文档不能为空哦~');
+        return;
+      }
+    if(task_introduce == '')
+    {
+      alert('亲亲，任务介绍不能为空哦~');
+      return;
+    }
+    if(task_standard == '')
+    {
+      alert('亲亲，任务标准不能为空哦~');
+      return;
+    }
+    if(task_number == '')
+    {
+      alert('亲亲，任务数量不能为空哦~');
+      return;
+    }
+    if(task_timelimit == '')
+    {
+      alert('亲亲，任务时限不能为空哦~');
+      return;
+    }
+     
+      var fd = new FormData();
+fd.append("upload", 1);
+fd.append("doc", $("#doc").get(0).files[0]);
+$.ajax({
+     url : "upload_doc",  
+     type : "POST",  
+     data:fd,
+     processData:false,  
+     contentType:false,
+     success : function(res) {
+       var doc_url = res;
+       if(res.code == 0)
+       {
+         alert(res.msg);
+         return;
+       }
+    $.ajax({
+    url:"publish_task",
+      data:{
+    "task_name":task_name,
+    "task_range":task_range,
+    "task_type":task_type,
+    "task_introduce":task_introduce,
+    "task_standard":task_standard,
+    "task_number":task_number,
+    "task_timelimit":task_timelimit,
+    "doc_url":doc_url
+    },
+     type:"POST",  
+     success:function(res){
+  if(res.code == 1)
+  {
+    alert(res.msg);
+    location.reload();
+  }
+  else
+  {
+    alert(res.msg);
+  }
+    } 
+    }) 
+     }
+})
+
+}
+   })
+  })
+</script>
+<script src="js/jquery.ui.custom.js"></script> 
+<script src="js/bootstrap.min.js"></script> 
+<script src="js/bootstrap-colorpicker.js"></script> 
+<script src="js/bootstrap-datepicker.js"></script> 
+<script src="js/jquery.toggle.buttons.html"></script> 
+<script src="js/masked.js"></script> 
+<script src="js/jquery.uniform.js"></script> 
+<script src="js/select2.min.js"></script> 
+<script src="js/matrix.js"></script> 
+<script src="js/jquery.dataTables.min.js"></script> 
+<script src="js/matrix.tables.js"></script>
+<script src="js/matrix.form_common.js"></script> 
+<script src="js/wysihtml5-0.3.0.js"></script> 
+<script src="js/jquery.peity.min.js"></script> 
+<script src="js/bootstrap-wysihtml5.js"></script> 
+</body>
+</html>

@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <title>西红柿数据-我要赚钱-公会大厅</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="stylesheet" href="css/bootstrap.min.css" />
+  <link rel="stylesheet" href="css/bootstrap-responsive.min.css" />
+  <link rel="stylesheet" href="css/colorpicker.css" />
+  <link rel="stylesheet" href="css/datepicker.css" />
+  <link rel="stylesheet" href="css/uniform.css" />
+  <link rel="stylesheet" href="css/select2.css" />
+  <link rel="stylesheet" href="css/matrix-style.css" />
+  <link rel="stylesheet" href="css/matrix-media.css" />
+  <link rel="stylesheet" href="css/bootstrap-wysihtml5.css" />
+  <link href="font-awesome/css/font-awesome.css" rel="stylesheet" />
+  <link href='http://fonts.googleapis.com/css?family=Open+Sans:400,700,800' rel='stylesheet' type='text/css'>
+</head>
+
+<body>
+  {include file="common/topheader" /}
+
+  {include file="common/sidebar" /}
+
+  <div id="content">
+    <div id="content-header">
+    </div>
+    <div class="container-fluid">
+      <hr />
+      <div class="row-fluid">
+
+        <div class="span4">
+
+          <div id='guild_company' class="widget-box">
+            <div class="widget-title"> <span class="icon"> <i class="icon-align-justify"></i> </span>
+              <h5>公会资料</h5>
+            </div>
+            <div class="widget-content nopadding">
+              <form id="form" class="form-horizontal">
+                  
+
+                <div class="control-group">
+                  <label class="control-label">联系人 :</label>
+                  <div class="controls">
+                    <input id="contact_name" type="text" maxlength="10" class="span11" placeholder="请输入联系人" value={$guild_detail.0.contact_name} />
+                  </div>
+                </div>
+                <div class="control-group">
+                  <label class="control-label">联系电话：</label>
+                  <div class="controls">
+                    <input id="contact_phone" type="text" maxlength="20" class="span11" placeholder="请输入联系电话" value={$guild_detail.0.contact_phone} />
+                  </div>
+                </div>
+                <div class="control-group">
+                  <label class="control-label">电子邮箱:</label>
+                  <div class="controls">
+                    <input id="contact_email" type="text" maxlength="30" class="span11" placeholder="请输入电子邮箱" value={$guild_detail.0.contact_email} />
+                  </div>
+                </div>
+                <div class="control-group">
+                  <label class="control-label">微信号：</label>
+                  <div class="controls">
+                    <input id="contact_wechat" type="text" maxlength="30" placeholder="请输入微信号" class="span11"  value={$guild_detail.0.contact_wechat} />
+                  </div>
+                </div>
+
+                <div class="control-group">
+                  <label class="control-label">公会名称:</label>
+                  <div class="controls">
+                    <input id="guild_name" type="text" maxlength="20" class="span11" placeholder="请输入公会名称" value={$guild_detail.0.guild_name} />
+                  </div>
+                </div>
+
+                <div class="control-group">
+                  <label class="control-label">公会介绍 :</label>
+                  <div class="controls">
+                    <textarea id="guild_introduce" class="span11" maxlength="100" placeholder="请输入公会介绍">{$guild_detail.0.guild_introduce}</textarea>
+                  </div>
+                </div>
+
+
+              </form>
+              <div class="form-actions">
+                <button id='submit' type="submit" style="margin-left:180px;" class="btn btn-success">修改资料</button>
+              </div>
+
+            </div>
+          </div>
+
+
+        </div>
+      </div>
+    </div>
+  </div>
+  {include file="common/footer" /}
+  <script src="js/jquery.min.js"></script>
+  <script>
+    $(function () {
+          $("#guild").attr('class', 'active');
+
+              $('#submit').click(function () {
+                  var guild_id = {$guild_detail.0.guild_id};
+                var contact_name = $('#contact_name').val();
+                var contact_phone = $('#contact_phone').val();
+                var contact_email = $('#contact_email').val();
+                var contact_wechat = $('#contact_wechat').val();
+                var guild_name = $('#guild_name').val();
+                var guild_introduce = $('#guild_introduce').val();
+         
+                if (contact_name == '') {
+                  alert('亲亲，联系人不能为空哦~');
+                  return;
+                }
+                if (contact_phone == '') {
+                  alert('亲亲，联系人电话不能为空哦~');
+                  return;
+                }
+                if (contact_email == '') {
+                  alert('亲亲，联系人邮箱不能为空哦~');
+                  return;
+                }
+                if (contact_wechat == '') {
+                  alert('亲亲，联系人微信不能为空哦~');
+                  return;
+                }
+                if (guild_name == '') {
+                  alert('亲亲，公会名称不能为空哦~');
+                  return;
+                }
+                if (guild_introduce == '') {
+                  alert('亲亲，公会介绍不能为空哦~');
+                  return;
+                }
+        
+                    $.ajax({
+                      url: "change_guild",
+                      data: {
+                        "guild_id":guild_id,
+                        'contact_name': contact_name,
+                        'contact_phone': contact_phone,
+                        'contact_email': contact_email,
+                        'contact_wechat': contact_wechat,
+                        'guild_name': guild_name,
+                        'guild_introduce': guild_introduce
+                      },
+                      type: "POST",
+                      success: function (res) {
+                        if (res.code == 1) {
+                          alert(res.msg);
+                          location.reload();
+                        } else if (res.code == 0 || res.code == 2 || res.code == 3) {
+                          alert(res.msg)
+                        }
+                      }
+                    })
+              })
+
+            })
+  </script>
+
+  <script src="js/jquery.ui.custom.js"></script>
+  <script src="js/bootstrap.min.js"></script>
+  <script src="js/bootstrap-colorpicker.js"></script>
+  <script src="js/bootstrap-datepicker.js"></script>
+  <script src="js/jquery.toggle.buttons.html"></script>
+  <script src="js/masked.js"></script>
+  <script src="js/jquery.uniform.js"></script>
+  <script src="js/select2.min.js"></script>
+  <script src="js/matrix.js"></script>
+  <script src="js/matrix.form_common.js"></script>
+  <script src="js/wysihtml5-0.3.0.js"></script>
+  <script src="js/jquery.peity.min.js"></script>
+  <script src="js/bootstrap-wysihtml5.js"></script>
+</body>
+
+</html>

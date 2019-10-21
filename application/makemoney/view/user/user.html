@@ -1,0 +1,323 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>西红柿数据-我要赚钱-用户中心</title>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<link rel="stylesheet" href="css/bootstrap.min.css" />
+<link rel="stylesheet" href="css/bootstrap-responsive.min.css" />
+<link rel="stylesheet" href="css/colorpicker.css" />
+<link rel="stylesheet" href="css/datepicker.css" />
+<link rel="stylesheet" href="css/uniform.css" />
+<link rel="stylesheet" href="css/select2.css" />
+<link rel="stylesheet" href="css/matrix-style.css" />
+<link rel="stylesheet" href="css/matrix-media.css" />
+<link rel="stylesheet" href="css/bootstrap-wysihtml5.css" />
+<link href="font-awesome/css/font-awesome.css" rel="stylesheet" />
+<link href='http://fonts.googleapis.com/css?family=Open+Sans:400,700,800' rel='stylesheet' type='text/css'>
+</head>
+<body>
+      {include file="common/topheader" /}
+
+      {include file="common/sidebar" /}
+<div id="content">
+<div id="content-header">
+ 
+</div>
+<div class="container-fluid">
+        <hr/>
+  <div class="row-fluid">
+    <div class="span6">
+   
+      <div class="widget-box">
+        <div class="widget-title">
+          <ul class="nav nav-tabs">
+            <li class="active"><a data-toggle="tab" href="#tab1">我的资料</a></li>
+            <li><a data-toggle="tab" href="#tab2">我的收入</a></li>
+            <li><a data-toggle="tab" href="#tab3">我的成绩</a></li>
+          </ul>
+        </div>
+        <div class="widget-content tab-content">
+          <div id="tab1" class="tab-pane active">
+                <form action="#" method="get" class="form-horizontal">
+                  <div class="control-group">
+                    <label class="control-label">用户名 :</label>
+                    <div class="controls">
+                      <input id="user_name" type="text" class="span11" value="{$user.0.user_name}" placeholder="请输入您的用户名" /><br />
+                    </div>
+                    <label class="control-label">真实姓名 :</label>
+                    <div class="controls">
+    
+                       <div> 
+                        <input id="name" type="text" class="span11" value="{$user.0.name}" placeholder="请输入您的姓名" /><br />
+                    </div>
+                    </div>
+
+                    <div  class="controls" style="margin-top: 20px;">
+                      <button id="user_name_submit" class="btn btn-success" onClick="return false;">修改资料</button>
+                    </div>
+                  </div>
+                 
+              
+                  <div class="control-group">
+                    <label class="control-label">邮箱 :</label>
+                    <div class="controls">
+                      <input id="email" type="text" class="span11" value="{$user.0.email}" placeholder="请输入您的邮箱" />
+                    </div>
+                    <div>
+                    <label class="control-label">验证码 :</label>
+                    <div class="controls">
+                      <input id="captcha" type="text" class="span11" style="width: 120px;" placeholder="请输入验证码" />
+                      <button id="send_email_captcha" class="btn btn-primary" onClick="return false;">发送验证码</button>
+                    </div>
+                  </div>
+                    <div  class="controls" style="margin-top: 20px;">
+                      <button id="email_submit"  class="btn btn-success" onClick="return false;">修改邮箱</button>
+                    </div>
+                  </div>
+
+
+                  <div class="control-group">
+                    <label class="control-label">旧密码 :</label>
+                    <div class="controls">
+                      <input id="old_password" type="password" class="span11"  placeholder="请输入您的旧密码" />   
+                    </div>
+                    <label class="control-label">新密码 :</label>
+                    <div class="controls">
+                      <input id="new_password" type="password" class="span11"  placeholder="请输入您的新密码" />   
+                    </div>
+                    <label class="control-label">重复新密码 :</label>
+                    <div class="controls">
+                      <input id="renew_password" type="password" class="span11" placeholder="请重复输入您的新密码" />   
+                    </div>
+                    <div  class="controls" style="margin-top: 20px;">
+                      <button id="change_pass_submit"  class="btn btn-success" onClick="return false;">修改密码</button>
+                    </div>
+                  </div>
+                </form>
+               
+          </div>
+          <div id="tab2" class="tab-pane">
+            <p>无相关数据</p>
+          </div>
+          <div id="tab3" class="tab-pane">
+            <p>无相关数据</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+
+    <div class="span6">
+
+    </div>
+  </div>
+</div></div>
+{include file="common/footer" /}
+<script src="js/jquery.min.js"></script>
+<script>
+  $(function(){
+    $("#user").attr('class','active');
+
+    $("#change_pass_submit").click(function() {
+      var old_password = $('#old_password').val();
+      var new_password = $('#new_password').val();
+      var renew_password = $('#renew_password').val();
+      if(old_password == '')
+      {
+        alert("亲亲，旧密码不能为空哦~");
+        return;
+      }
+      if(new_password == '')
+      {
+        alert("亲亲，新密码不能为空哦~");
+        return;
+      }
+      if(renew_password == "")
+      {
+        alert("亲亲，重复密码不能为空哦~");
+        return;
+      }
+      if(new_password != renew_password)
+      {
+        alert("亲亲，两次密码输入不一样哦~");
+        return;
+      }
+      $.ajax({
+      url:"update_change_password",
+      data:{
+      "old_password":old_password,
+      "new_password":new_password,
+      "renew_password":renew_password
+       },
+      type:"POST",
+      success:function(res){
+  if(res.code == 1)
+  {
+    alert(res.msg);
+    location.reload();
+  }
+  else if(res.code == 10)
+  {
+    alert(res.msg);
+    location.href = "login";
+  }
+  else
+  {
+    alert(res.msg);
+  }
+      }
+    })
+
+
+      
+    })
+
+
+    $("#user_name_submit").click(function(){
+      var user_name = $('#user_name').val();
+      var name = $("#name").val();
+      if(user_name == "")
+      {
+        alert("亲亲，用户名不能为空哦~");
+        return;
+      }
+
+      $.ajax({
+      url:"update_user_name",
+      data:{
+      "user_name":user_name,
+      "name":name
+       },
+      type:"POST",
+      success:function(res){
+  console.log(res);
+  if(res.code == 1)
+  {
+    alert(res.msg);
+    location.reload();
+  }
+  else if(res.code == 10)
+  {
+    alert(res.msg);
+    location.href = "login";
+  }
+  else
+  {
+    alert(res.msg);
+  }
+      }
+    })
+    })
+
+   
+    $('#send_email_captcha').click(function(){
+      var email = $('#email').val();
+      var email_Reg=/^[a-zA-Z0-9_-]+@([a-zA-Z0-9]+\.)+(com|cn|net|org)$/;
+      var email_check = email_Reg.test(email);
+      if(email == "")
+      {
+        alert("亲亲，邮箱不能为空哦~");
+        return;
+      }
+      if(!email_check)
+      {
+        alert("亲亲，邮箱格式不正确哦~");
+        return;
+      }
+      $.ajax({
+            url:"send_change_email_captcha",
+            data:{
+                "email":email
+            },
+            type:"POST",
+            success:function(res) {
+                if(res.code == 1)
+                {
+           alert(res.msg);
+           $("#send_email_captcha").attr("disabled",true);
+          var time = 59;
+          $("#send_email_captcha").text(time + "s可以重新发送");
+          var interval = setInterval(function(){
+           time = time - 1;
+           $("#send_email_captcha").text(time + "s可以重新发送");
+           if(time == 0)
+           {
+            clearInterval(interval);
+            $("#send_email_captcha").attr("disabled",false);
+            $("#send_email_captcha").text("发送验证码");
+           }  
+       }, 1000);
+                }
+                else
+                {
+                    alert(res.msg);
+                }
+            }
+        })
+
+    })
+
+    $('#email_submit').click(function(){
+      var email = $('#email').val();
+      var captcha = $('#captcha').val();
+      var email_Reg=/^[a-zA-Z0-9_-]+@([a-zA-Z0-9]+\.)+(com|cn|net|org)$/;
+     // var phone_Reg = /^1[3456789]\d{9}$/;
+      var email_check = email_Reg.test(email);
+  
+      if(email == "")
+      {
+        alert("亲亲，邮箱不能为空哦~");
+        return;
+      }
+      if(captcha == "")
+      {
+        alert("亲亲，验证码不能为空哦~");
+        return;
+      }
+      if(!email_check)
+      {
+        alert("亲亲，邮箱格式不正确哦~");
+        return;
+      }
+ 
+      $.ajax({
+      url:"update_user_email",
+      data:{
+      "captcha":captcha,
+      "email":email
+       },
+      type:"POST",
+      success:function(res){
+  if(res.code == 1)
+  {
+    alert(res.msg);
+    location.reload();
+  }
+  else
+  {
+    alert(res.msg);
+  }
+      }
+    })
+
+  })
+
+  })
+</script>
+
+<script src="js/jquery.ui.custom.js"></script> 
+<script src="js/bootstrap.min.js"></script> 
+<script src="js/bootstrap-colorpicker.js"></script> 
+<script src="js/bootstrap-datepicker.js"></script> 
+<script src="js/jquery.toggle.buttons.html"></script> 
+<script src="js/masked.js"></script> 
+<script src="js/jquery.uniform.js"></script> 
+<script src="js/select2.min.js"></script> 
+<script src="js/matrix.js"></script> 
+<script src="js/matrix.form_common.js"></script> 
+<script src="js/wysihtml5-0.3.0.js"></script> 
+<script src="js/jquery.peity.min.js"></script> 
+<script src="js/bootstrap-wysihtml5.js"></script> 
+</body>
+</html>

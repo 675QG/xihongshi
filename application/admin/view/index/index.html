@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<title>西红柿数据-后台管理员</title>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<link rel="stylesheet" href="css/bootstrap.min.css" />
+<link rel="stylesheet" href="css/bootstrap-responsive.min.css" />
+<link rel="stylesheet" href="css/fullcalendar.css" />
+<link rel="stylesheet" href="css/matrix-style.css" />
+<link rel="stylesheet" href="css/matrix-media.css" />
+<link href="font-awesome/css/font-awesome.css" rel="stylesheet" />
+<link rel="stylesheet" href="css/jquery.gritter.css" />
+<link href='http://fonts.googleapis.com/css?family=Open+Sans:400,700,800' rel='stylesheet' type='text/css'>
+</head>
+<body>
+ {include file="common/topheader" /}
+
+ {include file="common/sidebar" /}
+
+<!--sidebar-menu-->
+
+<!--main-container-part-->
+<div id="content">
+<!--breadcrumbs-->
+  <div id="content-header">
+  </div>
+<!--End-breadcrumbs-->
+
+<!--Action boxes-->
+  <div class="container-fluid">
+    <div class="quick-actions_homepage">
+      <ul class="quick-actions">
+        <li class="bg_lb"> <a href="admin"> <i class="icon-dashboard"></i> <span class="label label-important"></span>我的控制台</a> </li>
+        <li class="bg_ly"> <a href="admin_guild"> <i class="icon-inbox"></i><span class="label label-success"></span> 公会管理 </a> </li>
+        <li class="bg_lo span3"> <a href="admin_task"> <i class="icon-th-list"></i> 任务管理</a> </li>
+     <!--    <li class="bg_lb"> <a href="admin/result"> <i class="icon-pencil"></i>结果管理</a> </li>
+        <li class="bg_ls"> <a href="admin/user"> <i class="icon-user"></i> 用户管理</a> </li>  -->
+      </ul>
+    </div>
+<!--End-Action boxes-->    
+
+<!--Chart-box-->    
+
+<!--End-Chart-box--> 
+    <hr/>
+
+
+        </div>
+
+
+        <div class="span7">
+            <div class="widget-box">
+              <div class="widget-title"> <span class="icon"><i class="icon-ok"></i></span>
+                <h5>首页需求</h5>
+              </div>
+              <div class="widget-content">
+                <div class="todo">
+                  <ul>
+                      {foreach name="get_index_demand" item="item" index="index"}
+                    <li class="clearfix">
+                      <div class="txt"> <span>提交时间：{$item.add_time}</span> <br /> <span>姓名：{$item.name}</span><br />  <span>电话：{$item.phone}</span> <br />
+                        需求：{$item.demand} </div>
+                      <div class="pull-right"> <button class="btn btn-success btn-mini"  id="done{$index}" name="{$item.index_demand_id}" title="已联系">已联系</button></div>
+                    </li>
+                    {/foreach}
+               
+                  </ul>
+                </div>
+              </div>
+            </div>
+        </div>
+        
+      </div>
+      
+    </div>
+  </div>
+</div>
+{include file="common/footer" /}
+<script src="js/excanvas.min.js"></script> 
+<script src="js/jquery.min.js"></script> 
+<script>
+$(function(){
+  $("#home").attr("class","active");
+
+var get_index_demand_num = {$get_index_demand_num};
+for(let i=0;i<=get_index_demand_num;i++)
+{
+  $("#done"+i).click(function(e) {
+    var index_demand_id = e.target.name;
+    $.ajax({
+      url:"admin_demand_done",
+      data:{
+      "index_demand_id":index_demand_id
+       },
+      type:"POST",
+      success:function(res){
+  if(res.code == 1)
+  {
+    alert(res.msg);
+    location.reload();
+  }
+  else
+  {
+    alert(res.msg);
+  }
+      }
+    })
+
+   
+    
+  })
+
+}
+
+  
+})
+</script>
+<script src="js/jquery.ui.custom.js"></script> 
+<script src="js/bootstrap.min.js"></script> 
+<script src="js/jquery.flot.min.js"></script> 
+<script src="js/jquery.flot.resize.min.js"></script> 
+<script src="js/jquery.peity.min.js"></script> 
+<script src="js/fullcalendar.min.js"></script> 
+<script src="js/matrix.js"></script> 
+<script src="js/matrix.dashboard.js"></script> 
+<script src="js/jquery.gritter.min.js"></script> 
+<script src="js/matrix.interface.js"></script> 
+<script src="js/matrix.chat.js"></script> 
+<script src="js/jquery.validate.js"></script> 
+<script src="js/matrix.form_validation.js"></script> 
+<script src="js/jquery.wizard.js"></script> 
+<script src="js/jquery.uniform.js"></script> 
+<script src="js/select2.min.js"></script> 
+<script src="js/matrix.popover.js"></script> 
+<script src="js/jquery.dataTables.min.js"></script> 
+<script src="js/matrix.tables.js"></script> 
+
+<script type="text/javascript">
+  // This function is called from the pop-up menus to transfer to
+  // a different page. Ignore if the value returned is a null string:
+  function goPage (newURL) {
+
+      // if url is empty, skip the menu dividers and reset the menu selection to default
+      if (newURL != "") {
+      
+          // if url is "-", it is this page -- reset the menu:
+          if (newURL == "-" ) {
+              resetMenu();            
+          } 
+          // else, send page to designated URL            
+          else {  
+            document.location.href = newURL;
+          }
+      }
+  }
+
+// resets the menu selection upon entry to this page:
+function resetMenu() {
+   document.gomenu.selector.selectedIndex = 2;
+}
+
+
+
+</script>
+</body>
+</html>

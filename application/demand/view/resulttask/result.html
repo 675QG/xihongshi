@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>西红柿数据-我有需求-查看结果</title>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<link rel="stylesheet" href="css/bootstrap.min.css" />
+<link rel="stylesheet" href="css/bootstrap-responsive.min.css" />
+<link rel="stylesheet" href="css/colorpicker.css" />
+<link rel="stylesheet" href="css/datepicker.css" />
+<link rel="stylesheet" href="css/uniform.css" />
+<link rel="stylesheet" href="css/select2.css" />
+<link rel="stylesheet" href="css/matrix-style.css" />
+<link rel="stylesheet" href="css/matrix-media.css" />
+<link rel="stylesheet" href="css/bootstrap-wysihtml5.css" />
+<link href="font-awesome/css/font-awesome.css" rel="stylesheet" />
+<link href='http://fonts.googleapis.com/css?family=Open+Sans:400,700,800' rel='stylesheet' type='text/css'>
+</head>
+<body>
+    {include file="common/topheader" /}
+      <div id="sidebar"><a href="demand" class="visible-phone"><i class="icon icon-home"></i> 控制台</a>
+        <ul>
+          <li><a href="demand"><i class="icon icon-home"></i> <span>控制台</span></a> </li>
+          
+          <li> <a href="publish"><i class="icon icon-th-list"></i> <span>发布任务</span> </a>
+          </li>
+          <li class="active"> <a href="result" ><i class="icon icon-pencil"></i> <span>查看结果</span></a></li>
+          </ul>
+        </div>
+
+<div id="content">
+<div id="content-header">
+ 
+</div>
+<div class="container-fluid">
+        <hr/>
+  <div class="row-fluid">
+    <div class="span6">
+   
+      <div class="widget-box">
+        <div class="widget-title"> <span class="icon"> <i class="icon-align-justify"></i> </span>
+          <h5>查看任务</h5>
+        </div>
+        <div class="widget-content nopadding">
+
+          <form action="#" method="get" class="form-horizontal">
+            
+            <div class="control-group">
+              <label class="control-label">任务范围</label>
+              <div class="controls" style="width:200px">
+                <select >
+                  <option>全部</option>
+                  <option>全员任务</option>
+                  <option>公会任务</option>
+                </select>
+              </div>
+            </div>
+
+            <div class="control-group">
+                <label class="control-label">任务类型</label>
+                <div class="controls"  style="width:200px">
+                  <select >
+                    <option>全部</option>
+                    <option>文字识别</option>
+                    <option>语音识别</option>
+                  </select>
+                </div>
+              </div>
+              <label class="control-label">任务名称</label>
+              <div class="controls controls-row" >
+                    <input type="text" style="width:180px" placeholder="" class="span3 m-wrap">
+                  </div>
+        
+            <div class="form-actions">
+              <button type="submit" class="btn btn-success" style="margin-left: 200px">查询</button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+    <div class="span6">
+      <div class="widget-box">
+        <div class="widget-title"> <span class="icon"> <i class="icon-align-justify"></i> </span>
+          <h5>已领取任务</h5>
+        </div>
+        <div class="widget-content">
+      暂时没有
+        </div>
+      </div>
+    </div>
+  </div>
+</div></div>
+{include file="common/footer" /}
+<script src="js/jquery.min.js"></script> 
+<script src="js/jquery.ui.custom.js"></script> 
+<script src="js/bootstrap.min.js"></script> 
+<script src="js/bootstrap-colorpicker.js"></script> 
+<script src="js/bootstrap-datepicker.js"></script> 
+<script src="js/jquery.toggle.buttons.html"></script> 
+<script src="js/masked.js"></script> 
+<script src="js/jquery.uniform.js"></script> 
+<script src="js/select2.min.js"></script> 
+<script src="js/matrix.js"></script> 
+<script src="js/matrix.form_common.js"></script> 
+<script src="js/wysihtml5-0.3.0.js"></script> 
+<script src="js/jquery.peity.min.js"></script> 
+<script src="js/bootstrap-wysihtml5.js"></script> 
+</body>
+</html>

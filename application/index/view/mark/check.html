@@ -1,0 +1,270 @@
+<html>
+        <head>
+         
+<link rel="stylesheet" href="/static/bootstrap-3.3.7-dist/css/bootstrap.css">
+<link rel="stylesheet" href="/static/css/drawing.css">
+<script src="/static/bootstrap-3.3.7-dist/js/jquery-3.2.1.min.js"></script>
+<script src="/static/bootstrap-3.3.7-dist/js/bootstrap.js"></script>
+<script type="text/javascript" src="/js/svg_check.js"></script>
+</head>
+<script>
+  var mark_id = {$get_mark_check.0.mark_id};
+   var rectangle_total_number = {$get_mark_check.0.rectangle_total_number};
+   var rectangle_total_value =  {$get_mark_check.0.rectangle_total_value};
+   var radio_total_info = {$get_mark_check.0.radio_total_info};
+    $(function () {
+      var min_check = getCookie("min_check");
+    var sec_check = getCookie("sec_check");
+    if(!min_check && !sec_check)
+    {
+      var min_check = 59;
+      var sec_check = 59;
+    }
+    show_time(min_check,sec_check);
+    var timer = setInterval(() => {
+      sec_check--;
+      if(sec_check<0)
+      {
+        min_check--;
+        if(min_check<0)
+        {
+          min_check = 59;
+        }
+        sec_check=59;
+      }
+  
+    show_time(min_check,sec_check);
+      document.cookie="min_check=" + min_check;
+      document.cookie="sec_check=" + sec_check;
+   //   document.cookie="min_check=";
+   //   document.cookie="sec_check=";
+    }, 1000);
+
+    function show_time(min_check,sec_check)
+    {
+      if(min_check<10)
+      {   
+
+        if(sec_check<10)
+        {
+        $("#timer").text("剩余时间：0"+ min_check +":0" + sec_check);
+        }
+      else
+      {
+        $("#timer").text("剩余时间：0"+ min_check +":" + sec_check);
+      }
+        
+      }
+      else
+      {
+
+        if(sec_check<10)
+        {
+        $("#timer").text("剩余时间："+ min_check +":0" + sec_check);
+        }
+      else
+      {
+        $("#timer").text("剩余时间："+ min_check +":" + sec_check);
+      }
+      }
+    }
+
+
+
+
+    function getCookie(cname)
+   {
+  var name = cname + "=";
+  var ca = document.cookie.split(';');
+  for(var i=0; i<ca.length; i++) 
+  {
+    var c = ca[i].trim();
+    if (c.indexOf(name)==0) 
+    return c.substring(name.length,c.length);
+  }
+  return "";
+  }
+
+
+
+
+
+        $("#pass").click(function () {
+            $.ajax({
+                url: "check",
+                data: {
+                    "mark_id": mark_id,
+                    "check_pass": 1
+                },
+                type: "POST",
+                success: function (res) {
+                    if(res.code == 1)
+                    {
+                      alert(res.msg);
+                      location.reload();
+                    }
+                    else
+                    {
+                      alert(res.msg);
+                    }
+
+                }
+
+            })
+        })
+
+
+
+        $("#reject").click(function () {
+            $.ajax({
+                url: "check",
+                data: {
+                    "mark_id": mark_id,
+                    "check_pass": 0
+                },
+                type: "POST",
+                success: function (res) {
+                    if(res.code == 1)
+                    {
+                      alert(res.msg);
+                      location.reload();
+                    }
+                    else
+                    {
+                      alert(res.msg);
+                    }
+                }
+
+            })
+
+        })
+
+    })
+</script>
+<div class="OuterBoundingBox">
+        <div class = "ToolBoxBoundingBox">
+       
+                <input class="btn btn-default" type="button" value="拖动" id="MoveImg" name="toolsOption" checked="checked">
+                <input class="btn btn-default" type="button" value="绘矩形" id="Rectangle" name="toolsOption">
+                <input class="btn btn-default" type="button" value="调四边形" id="Quadrilateral" name="toolsOption">
+                <input class="btn btn-default" type="button" value="调矩形" id="RectMove" name="toolsOption">
+                <input class="btn btn-default" type="button" value="帮助" id="Help" name="toolsOption">
+                <span id="do"></span>
+                标注人：{$get_user.0.name}
+                <span id="timer"></span>
+              </div>
+             
+        <div class = "InnerBoundingBox">
+          <div class="col-md-1" id="BoundingBox">
+            <div class = "BoundingIdBox">
+            <ul id="men" class="BoundingIdMenLight">
+              <!-- <li value = "123">123</li> -->
+            </ul>
+            </div>
+          </div>
+          <div class="col-md-9" id="container">
+              <div id="temp" style="border:1px solid gray;width:1px;height:1px;position:absolute;display:none;">
+                
+              </div>
+              <div class="image_canvas_container" >
+                <!-- <img src="static/images/bg.png" class="Svg_bgp" width="100%" height="100%"> -->
+                <div class="SvgBox">
+                  <div class = "svg_container" >
+
+
+                    <svg class="svg_tool"  xmlns="http://www.w3.org/2000/svg" focusable="true" tabindex="-1">
+                      <image id="image" href="{$get_mark_check.0.mark_img_url}" class="Svg_bgp">
+                      </image>
+                      <g class="svg_line_container">
+                        <line class="line_X" x1="0" y1="0" x2="0" y2="0" style = "stroke:rgb(0,139,69);stroke-width:1">
+                        </line>
+                        <line class="line_Y" x1="0" y1="0" x2="0" y2="0" style = "stroke:rgb(0,139,69);stroke-width:1">
+                        </line>
+                      </g>
+                      <g class="svg_drawing_path">
+                        <path id = "drawing_path" ></path>
+
+                      </g>
+                      <g class="svg_rect_container">
+                        <rect class="RectangleDraw" id="rect1" x="0" y="0" height="5" width="5" >
+                        </rect>
+                        <rect class="RectangleDraw" id="rect2" x="0" y="0" height="5" width="5" >
+                        </rect>
+                        <rect class="RectangleDraw" id="rect3" x="0" y="0" height="5" width="5" >
+                        </rect>
+                        <rect class="RectangleDraw" id="rect4" x="0" y="0" height="5" width="5" >
+                        </rect>
+                        <rect class="RectangleDraw" id="rect5" x="0" y="0" height="5" width="5" >
+                        </rect>
+                        <rect class="RectangleDraw" id="rect6" x="0" y="0" height="5" width="5" >
+                        </rect>
+                        <rect class="RectangleDraw" id="rect7" x="0" y="0" height="5" width="5" >
+                        </rect>
+                        <rect class="RectangleDraw" id="rect8" x="0" y="0" height="5" width="5" >
+                        </rect>
+                      </g>
+  
+                    </svg>
+                  </div>
+                </div>
+              </div>
+            
+          </div>
+          <div class="col-md-2" id="MarkBoundingBox">
+            <div class="SelectMark">
+              <p class="big_item">选择标签</p>
+              <label class="RadioMark">
+                <input type="radio"  class="radio_mark" id="Mark1" name="Mark"  value = "1" checked="true"> 横式
+              </label>
+              <label class="RadioMark">
+                <input type="radio"  class="radio_mark" id="Mark2" name="Mark" value = "2" > 竖式
+              </label>
+              <label class="RadioMark">
+                <input type="radio"  class="radio_mark" id="Mark3" name="Mark" value = "3"> 脱式
+              </label>
+              <label class="RadioMark">
+                <input type="radio"  class="radio_mark" id="Mark4" name="Mark" value = "4"> 解方程
+              </label>
+              <label class="RadioMark">
+                <input type="radio"  class="radio_mark" id="Mark5" name="Mark" value = "5"> 解题过程
+              
+              </label>
+              <label class="RadioMark">
+                <input type="radio"  class="radio_mark" id="Mark6" name="Mark" value = "6"> 不确定
+              </label>
+              <textarea class="form-control" rows="4"></textarea>
+            </div>
+            <div class="drawing_help">
+              <p class="big_item">注意事项和快捷键</p>
+              <p>1、绘制矩形只能用于绘制矩形</p>
+              <p>2、如需调整绘制的矩形，请调整命令按钮</p>
+              <p>3、缩放画布<strong>滚动鼠标滚轮</strong></p>
+              <p>4、移动画布<strong>(W)</strong></p>
+              <p>5、绘制矩形<strong>(A)</strong></p>
+              <p>6、调整四边形<strong>(S)</strong></p>
+              <p>7、调整矩形<strong>(D)</strong></p>
+              <p>8、删除某个四边形<strong>(Del)</strong></p>
+              <p>9、移动到上一个框<strong>(J)</strong></p>
+              <p>10、移动到下一个框<strong>(K)</strong></p>
+              <p>11、帮助<strong>(H)</strong></p>
+            </div>
+            
+          </div>
+  
+          
+        </div>
+        <div class = "SubmitTaskBox">
+          <div style="text-align: center;margin:180px 0;">
+            <input class="btn btn-default btn-sm" type="button" value="通过" id="pass">
+            <input class="btn btn-default btn-sm" type="button" value="打回" id="reject">
+            <input class="btn btn-default btn-sm" type="button" value="修改" id="submit_task">
+
+          </div>
+      
+        </div>
+        
+      </div>
+
+
+
+</html>
